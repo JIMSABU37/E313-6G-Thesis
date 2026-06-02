@@ -1,0 +1,14 @@
+import socket
+
+# Experiment 1 & 3: UDP URLLC Receiver
+UDP_IP = "0.0.0.0"  # Listens on all available interfaces
+UDP_PORT = 5005
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((UDP_IP, UDP_PORT))
+
+print(f"Listening for URLLC UDP safety messages on port {UDP_PORT}...")
+
+while True:
+    data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
+    print(f"Received safety message: {data.decode('utf-8')} from {addr}")
