@@ -45,7 +45,7 @@ model = Sequential([
 model.compile(optimizer='adam', loss='mse')
 
 print("Training Advanced Model...")
-model.fit(X_seq, y_seq, epochs=3, batch_size=64, validation_split=0.2)
+history = model.fit(X_seq, y_seq, epochs=3, batch_size=64, validation_split=0.2)
 
 # ISOLATING THE FILES: Saving with new names!
 model.save("lstm_advanced.keras")
@@ -53,3 +53,26 @@ with open("scaler_advanced.pkl", "wb") as f:
     pickle.dump(scaler_X, f)
 
 print("\n✅ UPGRADE COMPLETE: Saved as 'lstm_advanced.keras'!")
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+print("Generating Training Curve Graph...")
+
+# Set up the visual style
+sns.set_theme(style="whitegrid")
+plt.figure(figsize=(8, 6))
+
+# Plot the training and validation loss from the 'history' object
+# (Make sure your model.fit() was saved to a variable called 'history')
+plt.plot(history.history['loss'], label='Training Loss', color='blue', linewidth=2)
+plt.plot(history.history['val_loss'], label='Validation Loss', color='orange', linewidth=2)
+
+plt.title("LSTM Model Learning Curve: Training vs. Validation Loss", fontsize=14, fontweight='bold')
+plt.xlabel("Epochs", fontsize=12, fontweight='bold')
+plt.ylabel("Loss (Mean Squared Error)", fontsize=12, fontweight='bold')
+plt.legend(loc="upper right")
+
+# Save the graph
+plt.tight_layout()
+plt.savefig("thesis_graph_training_curve.png", dpi=300)
+print("✅ SUCCESS: Graph saved as 'thesis_graph_training_curve.png'!")

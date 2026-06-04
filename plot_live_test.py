@@ -4,6 +4,9 @@ import seaborn as sns
 
 print("--- Generating Live Physical Test Graph ---")
 
+# Ask you for a custom name before it creates the graph
+scenario_name = input("What is the name of this test scenario? (e.g., sudden_spike): ")
+
 # 1. Load the recorded data
 df = pd.read_csv("live_physical_test_results.csv")
 
@@ -16,13 +19,11 @@ ax1.plot(df['Time_Seconds'], df['Node10_CPU'], color='blue', linewidth=2, label=
 ax1.axhline(50.0, color='orange', linestyle='--', label='Simulated Fault Threshold (50%)')
 ax1.set_ylabel("CPU Usage (%)", fontsize=12, fontweight='bold')
 ax1.set_title("6G Edge AI Testbed: Telemetry & Proactive Trigger Response", fontsize=14, fontweight='bold')
-
-# MOVED SLIGHTLY LEFT INTO THE PERFECT DEAD SPACE
 ax1.legend(loc="upper center", bbox_to_anchor=(0.4, 1.0))
 
 # 4. Bottom Graph: AI Prediction & UDP Triggers
 ax2.plot(df['Time_Seconds'], df['Pred_Risk'], color='red', linewidth=2, label='AI Predicted Risk (Latency)')
-ax2.axhline(0.0042, color='darkred', linestyle='--', label='URLLC Safety Threshold (0.0042)')
+ax2.axhline(0.0100, color='darkred', linestyle='--', label='URLLC Safety Threshold (0.0100)')
 
 # Highlight the exact moments the UDP trigger fired
 triggers = df[df['Trigger_Fired'] == 1]
@@ -30,12 +31,11 @@ ax2.scatter(triggers['Time_Seconds'], triggers['Pred_Risk'], color='black', mark
 
 ax2.set_xlabel("Time (Seconds)", fontsize=12, fontweight='bold')
 ax2.set_ylabel("Predicted Latency Risk", fontsize=12, fontweight='bold')
-
-# MOVED SLIGHTLY LEFT INTO THE PERFECT DEAD SPACE
 ax2.legend(loc="upper center", bbox_to_anchor=(0.4, 1.0))
 
-# 5. Save the graph as a high-resolution image
+# 5. Save the graph as a high-resolution image with your custom name
 plt.tight_layout()
-plt.savefig("thesis_graph_live_test.png", dpi=300)
+save_filename = f"{scenario_name}.png"
+plt.savefig(save_filename, dpi=300)
 
-print("✅ SUCCESS: Graph saved as 'thesis_graph_live_test.png'!")
+print(f"✅ SUCCESS: Graph saved safely as '{save_filename}'!")
